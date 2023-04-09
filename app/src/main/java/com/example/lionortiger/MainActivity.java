@@ -9,6 +9,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import java.util.Arrays;
+
 public class MainActivity extends AppCompatActivity {
 
     enum Player {
@@ -32,19 +34,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        for (int index = 0; index < playerChoices.length; index++){
-            playerChoices[index] = Player.No;
-        }
+        Arrays.fill(playerChoices, Player.No);
 
         btnReset = findViewById(R.id.btnReset);
         gridLayout = findViewById(R.id.gridLayout);
 
-        btnReset.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                resetTheGame();
-            }
-        });
+        btnReset.setOnClickListener(view -> resetTheGame());
 
     }
 
@@ -52,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         ImageView tappedImageView = (ImageView) imageView;
         int tiTag = Integer.parseInt(tappedImageView.getTag().toString());
 
-        if (playerChoices[tiTag] == Player.No && gameOver == false) {
+        if (playerChoices[tiTag] == Player.No && !gameOver) {
 
             tappedImageView.setTranslationX(-2000);
 
@@ -89,8 +84,17 @@ public class MainActivity extends AppCompatActivity {
 
                     Toast.makeText(this, winner + " is the winner!", Toast.LENGTH_LONG).show();
                 }
+
+
             }
 
+            if (!gameOver && playerChoices[0]!=Player.No && playerChoices[1]!=Player.No && playerChoices[2]!=Player.No && playerChoices[3]!=Player.No && playerChoices[4]!=Player.No && playerChoices[5]!=Player.No && playerChoices[6]!=Player.No && playerChoices[7]!=Player.No && playerChoices[8]!=Player.No ) {
+                btnReset.animate().alpha(0);
+                btnReset.setVisibility(View.VISIBLE);
+                btnReset.animate().alpha(1).setDuration(2000);
+                gameOver = true;
+                Toast.makeText(this, "Its a TIE!", Toast.LENGTH_SHORT).show();
+            }
         }
 
     }
@@ -106,9 +110,7 @@ public class MainActivity extends AppCompatActivity {
 
         currentPlayer = Player.ONE;
 
-        for (int index = 0; index < playerChoices.length; index++){
-            playerChoices[index] = Player.No;
-        }
+        Arrays.fill(playerChoices, Player.No);
 
         gameOver = false;
 
